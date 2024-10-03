@@ -1,18 +1,17 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.StringTokenizer;
 
 public class Main {
+
+
     private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     private static StringTokenizer st;
     private static StringBuilder sb = new StringBuilder();
 
     private static int N, M;
-    private static Set<Integer> cdSet;
-
+    private static int[] arr;
     private static int answer;
 
     public static void main(String[] args) throws IOException {
@@ -25,26 +24,49 @@ public class Main {
         N = Integer.parseInt(st.nextToken());
         M = Integer.parseInt(st.nextToken());
 
-        if (N == 0 && M == 0) {
+        if (isEndCondition()) {
             System.out.println(sb);
             return;
         }
 
         answer = 0;
-        cdSet = new HashSet<>();
+        arr = new int[N];
 
         for (int i = 0; i < N; i++) {
-            cdSet.add(Integer.parseInt(br.readLine()));
+            arr[i] = Integer.parseInt(br.readLine());
         }
 
         for (int i = 0; i < M; i++) {
-            if (cdSet.contains(Integer.parseInt(br.readLine()))) {
+            int curNum = Integer.parseInt(br.readLine());
+            if (binarySearch(curNum)) {
                 answer += 1;
             }
         }
-
         sb.append(answer).append("\n");
-
         solve();
+    }
+
+    private static boolean binarySearch(int curNum) {
+        int left = 0;
+        int right = N - 1;
+
+        while (left <= right) {
+            int mid = (left + right) / 2;
+
+            if (curNum == arr[mid]) {
+                return true;
+            }
+            if (curNum > arr[mid]) {
+                left = mid + 1;
+            } else if (curNum < arr[mid]) {
+                right = mid - 1;
+            }
+        }
+        return false;
+    }
+
+
+    private static boolean isEndCondition() {
+        return (N == 0 && M == 0);
     }
 }
